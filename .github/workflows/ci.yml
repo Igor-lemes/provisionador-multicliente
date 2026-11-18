@@ -1,0 +1,15 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  checar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checagem de sintaxe (Python e Bash)
+        run: ./scripts/checar-sintaxe.sh
+      - name: Testes
+        run: python3 -m unittest discover -s tests -v

@@ -1,0 +1,21 @@
+# Gerado por scripts/aplicar-nginx.sh. UM vhost por cliente, escolhido pelo
+# cabeçalho Host: é isso que remove o limite de "N portas liberadas na CDN",
+# porque todos os clientes compartilham a 80/443 e o nginx roteia por nome.
+server {
+    listen 80;
+    server_name {{SUBDOMINIO}};
+
+    # O padrão do nginx é 1M, baixo demais para upload de foto de celular
+    # (2-8M). Sem isto o upload volta 413 com a página de erro do nginx, que é
+    # HTML, e o front-end quebra tentando interpretá-la como JSON.
+    client_max_body_size 20M;
+
+    location / {
+        proxy_pass http://127.0.0.1:{{PORTA}};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+}

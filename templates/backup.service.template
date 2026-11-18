@@ -1,0 +1,8 @@
+# Instalado como {{APP_NOME}}-{{SLUG}}-backup.service (acionado pelo timer).
+[Unit]
+Description=Backup diário do banco de {{NOME_NEGOCIO}}
+
+[Service]
+Type=oneshot
+WorkingDirectory={{WORKDIR}}
+ExecStart={{BACKUP_CMD}}

@@ -1,0 +1,11 @@
+# Instalado como {{APP_NOME}}-{{SLUG}}-backup.timer.
+[Unit]
+Description=Roda o backup de {{NOME_NEGOCIO}} todo dia
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

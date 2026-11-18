@@ -1,0 +1,13 @@
+# Instalado como {{APP_NOME}}-{{SLUG}}-sync.service. Dispara a rotina periódica
+# do app (sincronizações, reconciliações) por HTTP, autenticada com o
+# CRON_SECRET da instância (ver templates/env.template).
+# Gerado para TODO cliente, sem opt-in: cada integração dentro da rotina se
+# autoprotege (só roda se estiver configurada), então para quem não usa nada
+# é só um curl vazio a cada 10 min.
+[Unit]
+Description=Rotina periódica de {{NOME_NEGOCIO}}
+
+[Service]
+Type=oneshot
+EnvironmentFile={{WORKDIR}}/.env.systemd
+ExecStart=/usr/bin/curl -fsS -X POST -H "Authorization: Bearer ${CRON_SECRET}" http://localhost:{{PORTA}}{{CRON_PATH}}

@@ -1,0 +1,24 @@
+# Gerado por scripts/provisionar-cliente.sh a partir deste template.
+# Instalado em ~/.config/systemd/user/{{APP_NOME}}-{{SLUG}}.service.
+
+[Unit]
+Description={{APP_NOME}} ({{NOME_NEGOCIO}})
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory={{WORKDIR}}
+# O app escuta em 127.0.0.1, não em 0.0.0.0: o nginx fala com a instância por
+# loopback (ver nginx.conf.template). Escutar em todas as interfaces só amplia
+# a superfície: com a porta alcançável de fora, a instância responderia direto,
+# sem passar pela CDN e sem os cabeçalhos que o nginx acrescenta.
+ExecStart={{START_CMD}} --hostname 127.0.0.1 --port {{PORTA}}
+Restart=on-failure
+RestartSec=3
+# .env.systemd, não .env: é uma cópia gerada (gerar-env-systemd.py) que omite
+# variável com "$" no valor. O parser do systemd tenta expandir "$" e quebra a
+# credencial em silêncio.
+EnvironmentFile={{WORKDIR}}/.env.systemd
+
+[Install]
+WantedBy=default.target

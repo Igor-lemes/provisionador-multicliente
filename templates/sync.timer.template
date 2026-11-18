@@ -1,0 +1,11 @@
+# Instalado como {{APP_NOME}}-{{SLUG}}-sync.timer (só junto com o sync.service).
+[Unit]
+Description=Roda a rotina periódica de {{NOME_NEGOCIO}} a cada 10 minutos
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=10min
+Persistent=false
+
+[Install]
+WantedBy=timers.target
